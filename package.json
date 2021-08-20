@@ -1,0 +1,49 @@
+{
+  "name": "disstest",
+  "type": "module",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+	"start": "npm run server",
+	"postinstall": "tsc",
+    "assets": "mkdir -p ./dst-client/src-shared/HeadphoneCheck_Test/ && cp -R ./src-shared/HeadphoneCheck_Test/stimuli_HugginsPitch/ ./dst-client/src-shared/HeadphoneCheck_Test/stimuli_HugginsPitch/",
+    "build-server": "tsc -p src-server",
+    "build-client": "tsc -p src-client && npm run assets",
+    "server": "npm run build-server && node ./dst-server/src-server/server.js",
+    "client": "npm run assets && parcel client.html -p 8000 --open --out-dir dst-client"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/express": "^4.17.12",
+    "@types/three": "^0.129.1",
+    "@types/ws": "^7.4.4",
+    "@typescript-eslint/eslint-plugin": "^4.28.5",
+    "@typescript-eslint/parser": "^4.28.5",
+    "eslint": "^7.32.0",
+    "eslint-config-prettier": "^8.3.0",
+    "eslint-plugin-prettier": "^3.4.0",
+    "ncp": "2.0.0",
+    "parcel-bundler": "^1.9.4",
+    "prettier": "^2.3.2",
+    "typescript": "^4.3.2"
+  },
+  "dependencies": {
+    "@angular/cdk": "^12.1.1",
+    "@logue/reverb": "^0.4.2",
+    "@three-ts/orbit-controls": "^1.4.7",
+    "@types/dat.gui": "^0.7.6",
+    "dat.gui": "^0.7.7",
+    "dotenv": "^5.0.1",
+    "express": "^4.17.1",
+    "freeverb": "^1.1.2",
+    "mongoose": "^5.13.2",
+    "parse-js": "^0.7.4",
+    "three": "^0.129.0",
+    "uniqid": "^5.3.0",
+    "ws": "^7.4.6",
+    "yenv": "^3.0.0"
+  }
+  "engines": { "node": "12.18.4" },
+}
