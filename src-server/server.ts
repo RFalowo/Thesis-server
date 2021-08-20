@@ -7,6 +7,7 @@ import UserModel from "../src-shared/users.model.js";
 import EmailModel from "../src-shared/email.model.js";
 
 import dotenv from "dotenv";
+console.log(dotenv)
 dotenv.config();
 // console.log(dotenv.config);
 //dotenv.config({ path: "../../client-server/.env" });
