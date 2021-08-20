@@ -1,0 +1,11 @@
+{
+
+  "extends": "../tsconfig.json",
+  "include": [".", "../src-shared"],                             /* Specify the root directory of input files. Use to control the output directory structure with --outDir. */
+
+  "compilerOptions": {
+    /* Visit https://aka.ms/tsconfig.json to read more about this file */
+
+    "outDir": "../dst-client",                              /* Redirect output structure to the directory. */
+  }
+}
