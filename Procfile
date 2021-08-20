@@ -1,0 +1,1 @@
+web: cd client-server && npm run server
