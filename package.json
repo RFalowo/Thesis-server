@@ -5,7 +5,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-	"start": "npm install && npm run server",
+	"start": "npm install && npm i --save-dev @types/node && npm run server",
     "assets": "mkdir -p ./dst-client/src-shared/HeadphoneCheck_Test/ && cp -R ./src-shared/HeadphoneCheck_Test/stimuli_HugginsPitch/ ./dst-client/src-shared/HeadphoneCheck_Test/stimuli_HugginsPitch/",
     "build-server": "tsc -p src-server",
     "build-client": "tsc -p src-client && npm run assets",
