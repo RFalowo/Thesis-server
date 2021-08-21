@@ -29,7 +29,7 @@
     "typescript": "^4.3.2"
   },
   "dependencies": {
-    "@types/node": "16.6.2",
+    "@types/node": "15.12.2",
     "typescript": "^4.3.2",
     "@angular/cdk": "^12.1.1",
     "@logue/reverb": "^0.4.2",
