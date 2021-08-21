@@ -1,6 +1,7 @@
 {
   "include": ["src-shared"],
   "compilerOptions": {
+    "moduleResolution": "node",
     "traceResolution": true,
     /* Visit https://aka.ms/tsconfig.json to read more about this file */
    // "types": ["node"],
