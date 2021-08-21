@@ -42,7 +42,7 @@ const server = express()
   .use((req, res) => {
     res.sendFile("../src-server/server.html");
   })
-  .listen(8080);
+  //.listen(8080);
 
 const wsServer = new ws.Server({ server });
 
