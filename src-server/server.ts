@@ -10,7 +10,7 @@ import dotenv from "dotenv";
 console.log(dotenv);
 dotenv.config();
 console.log(dotenv.config);
-dotenv.config({ path: "server/.env" });
+dotenv.config({ path: "app/.env" });
 const uri = process.env.MONGODBCRED;
 console.log(uri);
 mongoose.connect(uri, {
