@@ -5,8 +5,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-	"start": "npm install && npm i @types/node ",
-  "postinstall": "npm i @types/node && npm run server",
+    "start": "npm install && npm i @types/node && npm run server ",
+    "postinstall": "npm i @types/node ",
     "assets": "mkdir -p ./dst-client/src-shared/HeadphoneCheck_Test/ && cp -R ./src-shared/HeadphoneCheck_Test/stimuli_HugginsPitch/ ./dst-client/src-shared/HeadphoneCheck_Test/stimuli_HugginsPitch/",
     "build-server": "tsc -p src-server",
     "build-client": "tsc -p src-client && npm run assets",
@@ -17,6 +17,7 @@
   "license": "ISC",
   "devDependencies": {
     "@types/express": "^4.17.12",
+    "@types/node": "^15.14.9",
     "@types/three": "^0.129.1",
     "@types/ws": "^7.4.4",
     "@typescript-eslint/eslint-plugin": "^4.28.5",
@@ -27,12 +28,9 @@
     "ncp": "2.0.0",
     "parcel-bundler": "^1.9.4",
     "prettier": "^2.3.2",
-    "typescript": "^4.3.2",
-    "@types/node": "15.12.2"
-
+    "typescript": "^4.3.2"
   },
   "dependencies": {
-    "typescript": "^4.3.2",
     "@angular/cdk": "^12.1.1",
     "@logue/reverb": "^0.4.2",
     "@three-ts/orbit-controls": "^1.4.7",
@@ -44,9 +42,12 @@
     "mongoose": "^5.13.2",
     "parse-js": "^0.7.4",
     "three": "^0.129.0",
+    "typescript": "^4.3.2",
     "uniqid": "^5.3.0",
     "ws": "^7.4.6",
     "yenv": "^3.0.0"
   },
-  "engines": { "node": "12.18.4" }
+  "engines": {
+    "node": "12.18.4"
+  }
 }

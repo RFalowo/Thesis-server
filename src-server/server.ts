@@ -7,18 +7,21 @@ import UserModel from "../src-shared/users.model.js";
 import EmailModel from "../src-shared/email.model.js";
 
 import dotenv from "dotenv";
-console.log(dotenv)
+console.log(dotenv);
 dotenv.config();
 // console.log(dotenv.config);
 //dotenv.config({ path: "../../client-server/.env" });
 //const uri = process.env.MONGODBCRED;
 //console.log(uri);
-mongoose.connect('mongodb+srv://Remi:TJQvAr9SnEDGU2D@cluster0.43i0s.mongodb.net/Thesis?retryWrites=true&w=majority', {
-  keepAlive: true,
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-  useFindAndModify: false,
-});
+mongoose.connect(
+  "mongodb+srv://Remi:TJQvAr9SnEDGU2D@cluster0.43i0s.mongodb.net/Thesis?retryWrites=true&w=majority",
+  {
+    keepAlive: true,
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+    useFindAndModify: false,
+  }
+);
 
 // setTimeout(() => {
 //   UserModel.estimatedDocumentCount().exec((err, count) => {
@@ -38,11 +41,12 @@ mongoose.connect('mongodb+srv://Remi:TJQvAr9SnEDGU2D@cluster0.43i0s.mongodb.net/
 //     ).skip(random);
 //   });
 // }, 10000);
+const PORT: string | number = process.env.PORT || 5000;
 const server = express()
   .use((req, res) => {
     res.sendFile("../src-server/server.html");
   })
-  //.listen(8080);
+  .listen(PORT);
 
 const wsServer = new ws.Server({ server });
 
