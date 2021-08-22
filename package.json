@@ -26,10 +26,11 @@
     "ncp": "2.0.0",
     "parcel-bundler": "^1.9.4",
     "prettier": "^2.3.2",
-    "typescript": "^4.3.2"
+    "typescript": "^4.3.2",
+    "@types/node": "15.12.2"
+
   },
   "dependencies": {
-    "@types/node": "15.12.2",
     "typescript": "^4.3.2",
     "@angular/cdk": "^12.1.1",
     "@logue/reverb": "^0.4.2",
