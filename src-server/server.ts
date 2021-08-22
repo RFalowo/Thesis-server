@@ -9,19 +9,16 @@ import EmailModel from "../src-shared/email.model.js";
 import dotenv from "dotenv";
 console.log(dotenv);
 dotenv.config();
-// console.log(dotenv.config);
-//dotenv.config({ path: "../../client-server/.env" });
-//const uri = process.env.MONGODBCRED;
-//console.log(uri);
-mongoose.connect(
-  "mongodb+srv://Remi:TJQvAr9SnEDGU2D@cluster0.43i0s.mongodb.net/Thesis?retryWrites=true&w=majority",
-  {
-    keepAlive: true,
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-    useFindAndModify: false,
-  }
-);
+console.log(dotenv.config);
+dotenv.config({ path: "../../client-server/.env" });
+const uri = process.env.MONGODBCRED;
+console.log(uri);
+mongoose.connect(uri, {
+  keepAlive: true,
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+  useFindAndModify: false,
+});
 
 // setTimeout(() => {
 //   UserModel.estimatedDocumentCount().exec((err, count) => {
