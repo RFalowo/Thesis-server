@@ -13,12 +13,15 @@ console.log(dotenv.config);
 dotenv.config({ path: "app/.env" });
 const uri = process.env.MONGODBCRED;
 console.log(uri);
-mongoose.connect(uri, {
-  keepAlive: true,
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-  useFindAndModify: false,
-});
+mongoose.connect(
+  "mongodb+srv://Remi:TJQvAr9SnEDGU2D@cluster0.43i0s.mongodb.net/Thesis?retryWrites=true&w=majority",
+  {
+    keepAlive: true,
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+    useFindAndModify: false,
+  }
+);
 
 // setTimeout(() => {
 //   UserModel.estimatedDocumentCount().exec((err, count) => {
