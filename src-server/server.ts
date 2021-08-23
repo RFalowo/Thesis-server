@@ -14,33 +14,34 @@ import dotenv from "dotenv";
 // const uri = process.env.MONGODBCRED;
 // console.log(uri);
 const mongoose = new mongodb.MongoClient(
-  "mongodb+srv://Remi:TJQvAr9SnEDGU2D@cluster0.43i0s.mongodb.net/Thesis?retryWrites=true&w=majority"
+  "mongodb+srv://Remi:TJQvAr9SnEDGU2D@cluster0.43i0s.mongodb.net/Thesis?retryWrites=true&w=majority",
+  { useUnifiedTopology: true }
 );
 // mongoose.set("bufferCommands", false);
 const flibby = async () => {
   // await mongoose.connect(
-  await mongoose.connect(),
-    //   {
-    //     keepAlive: true,
-    //     useNewUrlParser: true,
-    //     useUnifiedTopology: true,
-    //     useFindAndModify: false,
-    //   }
-    // );
-    // mongoose.connection.on("error", (err) => {
-    //   console.log(err);
-    // });
-    //  catch (e) {
-    //   const result = e;
-    //   console.log(result);
-    // }
+  await mongoose.connect();
+  //   {
+  //     keepAlive: true,
+  //     useNewUrlParser: true,
+  //     useUnifiedTopology: true,
+  //     useFindAndModify: false,
+  //   }
+  // );
+  // mongoose.connection.on("error", (err) => {
+  //   console.log(err);
+  // });
+  //  catch (e) {
+  //   const result = e;
+  //   console.log(result);
+  // }
 
-    // catch ((error)=>  {
-    //     console.log("connect error: ", error);
-    // })
+  // catch ((error)=>  {
+  //     console.log("connect error: ", error);
+  // })
 
-    // .then(() => {
-    console.log(UserModel);
+  // .then(() => {
+  console.log(UserModel);
   const PORT: string | number = process.env.PORT || 5000;
   const server = express()
     .use((req, res) => {
