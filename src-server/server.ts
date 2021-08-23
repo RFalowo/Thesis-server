@@ -12,6 +12,8 @@ import dotenv from "dotenv";
 // dotenv.config({ path: "app/.env" });
 // const uri = process.env.MONGODBCRED;
 // console.log(uri);
+mongoose.set("bufferCommands", false);
+
 mongoose
   .connect(
     "mongodb+srv://Remi:TJQvAr9SnEDGU2D@cluster0.43i0s.mongodb.net/Thesis?retryWrites=true&w=majority",
