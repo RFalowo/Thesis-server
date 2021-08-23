@@ -14,7 +14,8 @@ import dotenv from "dotenv";
 // console.log(uri);
 mongoose.set("bufferCommands", false);
 
-mongoose
+try {
+await mongoose
   .connect(
     "mongodb+srv://Remi:TJQvAr9SnEDGU2D@cluster0.43i0s.mongodb.net/Thesis?retryWrites=true&w=majority",
     {
@@ -24,7 +25,13 @@ mongoose
       useFindAndModify: false,
     }
   )
-  .then(() => {
+  
+}catch((error)=>  {
+    console.log("connect error: ", error);
+});
+
+
+  // .then(() => {
     console.log("connected to mongodb");
     const PORT: string | number = process.env.PORT || 5000;
     const server = express()
@@ -98,10 +105,8 @@ mongoose
         }
       };
     });
-  })
-  .catch((err) => {
-    console.log("connect error: ", err);
-  });
+  // })
+  
 
 // setTimeout(() => {
 //   UserModel.estimatedDocumentCount().exec((err, count) => {
