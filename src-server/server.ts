@@ -24,6 +24,9 @@ mongoose
       useFindAndModify: false,
     }
   )
+  .catch((error) => {
+    console.log("connect error: ", error);
+  })
   .then(() => {
     const PORT: string | number = process.env.PORT || 5000;
     const server = express()
