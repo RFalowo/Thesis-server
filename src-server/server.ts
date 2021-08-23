@@ -14,15 +14,15 @@ dotenv.config();
 // dotenv.config({ path: "app/.env" });
 // const uri = process.env.MONGODBCRED;
 // console.log(uri);
-mongoose.connect(
-  "mongodb+srv://Remi:TJQvAr9SnEDGU2D@cluster0.43i0s.mongodb.net/Thesis?retryWrites=true&w=majority",
-  {
-    keepAlive: true,
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-    useFindAndModify: false,
-  }
-);
+// mongoose.connect(
+//   "mongodb+srv://Remi:TJQvAr9SnEDGU2D@cluster0.43i0s.mongodb.net/Thesis?retryWrites=true&w=majority",
+//   {
+//     keepAlive: true,
+//     useNewUrlParser: true,
+//     useUnifiedTopology: true,
+//     useFindAndModify: false,
+//   }
+// );
 
 // setTimeout(() => {
 //   UserModel.estimatedDocumentCount().exec((err, count) => {
@@ -76,17 +76,19 @@ wsServer.on("connection", (socket, request) => {
             messageEvent.data.toString()
           ) as AppMessage;
           console.log(message);
-          if (isGetOrder(message)) {
-            console.log("message recieved from client");
-            UserModel.estimatedDocumentCount().exec((err, count) => {
-              const response: Order = {
-                type: "Ord",
-                data: count % 2 === 0 ? "Sound" : "3D",
-              };
-              socket.send(JSON.stringify(response));
-              console.log("count error: ", err);
-            });
-          }
+          if (isGetOrder(message))
+            async () => {
+              console.log("message recieved from client");
+              await UserModel.estimatedDocumentCount().exec((err, count) => {
+                const response: Order = {
+                  type: "Ord",
+                  data: count % 2 === 0 ? "Sound" : "3D",
+                };
+
+                socket.send(JSON.stringify(response));
+                console.log("count error: ", err);
+              });
+            };
           if (message.type === "PlayerConnected") {
             console.log(message.data.userID);
             clients.push({
@@ -95,25 +97,26 @@ wsServer.on("connection", (socket, request) => {
             });
           }
 
-          if (message.type === "PlayerUpdate") {
-            console.log("playerupdate");
-            // (async () => {
-            const user = message.data;
-            //let doc = new userSchema
-            let doc = {
-              // _id: mongoose.Types.ObjectId(),
-              participant: user,
-            };
-            //todo ---------------------- add dot env so mongo creds are hidden
+          if (message.type === "PlayerUpdate")
+            async () => {
+              console.log("playerupdate");
+              // (async () => {
+              const user = message.data;
+              //let doc = new userSchema
+              let doc = {
+                // _id: mongoose.Types.ObjectId(),
+                participant: user,
+              };
+              //todo ---------------------- add dot env so mongo creds are hidden
 
-            UserModel.findOneAndUpdate(
-              { "participant.userID": user.userID },
-              doc,
-              {
-                upsert: true,
-              }
-            ).exec();
-          }
+              await UserModel.findOneAndUpdate(
+                { "participant.userID": user.userID },
+                doc,
+                {
+                  upsert: true,
+                }
+              ).exec();
+            };
 
           if (message.type === "EmailSubmit") {
             console.log("email submittion");
