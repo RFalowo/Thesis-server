@@ -2,9 +2,10 @@ import express from "express";
 import ws from "ws";
 import { AppMessage, isGetOrder, Order } from "../src-shared/messages.js";
 import { Player } from "../src-shared/api";
-import mongoose from "mongoose";
+// import mongoose from "mongoose";
 import UserModel from "../src-shared/users.model.js";
 import EmailModel from "../src-shared/email.model.js";
+import { MongoClient } from "mongodb";
 
 import dotenv from "dotenv";
 
@@ -12,31 +13,34 @@ import dotenv from "dotenv";
 // dotenv.config({ path: "app/.env" });
 // const uri = process.env.MONGODBCRED;
 // console.log(uri);
-mongoose.set("bufferCommands", false);
+const mongoose = new MongoClient(
+  "mongodb+srv://Remi:TJQvAr9SnEDGU2D@cluster0.43i0s.mongodb.net/Thesis?retryWrites=true&w=majority"
+);
+// mongoose.set("bufferCommands", false);
 const flibby = async () => {
-  await mongoose.connect(
-    "mongodb+srv://Remi:TJQvAr9SnEDGU2D@cluster0.43i0s.mongodb.net/Thesis?retryWrites=true&w=majority",
-    {
-      keepAlive: true,
-      useNewUrlParser: true,
-      useUnifiedTopology: true,
-      useFindAndModify: false,
-    }
-  );
-  mongoose.connection.on("error", (err) => {
-    console.log(err);
-  });
-  //  catch (e) {
-  //   const result = e;
-  //   console.log(result);
-  // }
+  // await mongoose.connect(
+  await mongoose.connect(),
+    //   {
+    //     keepAlive: true,
+    //     useNewUrlParser: true,
+    //     useUnifiedTopology: true,
+    //     useFindAndModify: false,
+    //   }
+    // );
+    // mongoose.connection.on("error", (err) => {
+    //   console.log(err);
+    // });
+    //  catch (e) {
+    //   const result = e;
+    //   console.log(result);
+    // }
 
-  // catch ((error)=>  {
-  //     console.log("connect error: ", error);
-  // })
+    // catch ((error)=>  {
+    //     console.log("connect error: ", error);
+    // })
 
-  // .then(() => {
-  console.log(UserModel);
+    // .then(() => {
+    console.log(UserModel);
   const PORT: string | number = process.env.PORT || 5000;
   const server = express()
     .use((req, res) => {
