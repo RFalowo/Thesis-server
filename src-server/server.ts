@@ -7,6 +7,7 @@ import UserModel from "../src-shared/users.model.js";
 import EmailModel from "../src-shared/email.model.js";
 
 import dotenv from "dotenv";
+import { connect } from "http2";
 console.log(dotenv);
 dotenv.config();
 // console.log(dotenv.config);
@@ -58,55 +59,76 @@ const clients: clients[] = [];
 
 wsServer.on("connection", (socket, request) => {
   console.log("someone connected");
+  const connectTo = async () => {
+    await mongoose
+      .connect(
+        "mongodb+srv://Remi:TJQvAr9SnEDGU2D@cluster0.43i0s.mongodb.net/Thesis?retryWrites=true&w=majority",
+        {
+          keepAlive: true,
+          useNewUrlParser: true,
+          useUnifiedTopology: true,
+          useFindAndModify: false,
+        }
+      )
+      .then(() => {
+        socket.onmessage = (messageEvent) => {
+          const message = JSON.parse(
+            messageEvent.data.toString()
+          ) as AppMessage;
+          console.log(message);
+          if (isGetOrder(message)) {
+            console.log("message recieved from client");
+            UserModel.estimatedDocumentCount().exec((err, count) => {
+              const response: Order = {
+                type: "Ord",
+                data: count % 2 === 0 ? "Sound" : "3D",
+              };
+              socket.send(JSON.stringify(response));
+              console.log("count error: ", err);
+            });
+          }
+          if (message.type === "PlayerConnected") {
+            console.log(message.data.userID);
+            clients.push({
+              socket,
+              player: message.data,
+            });
+          }
 
-  socket.onmessage = (messageEvent) => {
-    const message = JSON.parse(messageEvent.data.toString()) as AppMessage;
-    console.log(message);
-    if (isGetOrder(message)) {
-      console.log("message recieved from client");
-      UserModel.estimatedDocumentCount().exec((err, count) => {
-        const response: Order = {
-          type: "Ord",
-          data: count % 2 === 0 ? "Sound" : "3D",
+          if (message.type === "PlayerUpdate") {
+            console.log("playerupdate");
+            // (async () => {
+            const user = message.data;
+            //let doc = new userSchema
+            let doc = {
+              // _id: mongoose.Types.ObjectId(),
+              participant: user,
+            };
+            //todo ---------------------- add dot env so mongo creds are hidden
+
+            UserModel.findOneAndUpdate(
+              { "participant.userID": user.userID },
+              doc,
+              {
+                upsert: true,
+              }
+            ).exec();
+          }
+
+          if (message.type === "EmailSubmit") {
+            console.log("email submittion");
+            const email = message.data;
+            let doc = {
+              email: email.Email,
+            };
+
+            EmailModel.create(doc);
+          }
         };
-        socket.send(JSON.stringify(response));
-        console.log("count error: ", err);
       });
-    }
-    if (message.type === "PlayerConnected") {
-      console.log(message.data.userID);
-      clients.push({
-        socket,
-        player: message.data,
-      });
-    }
-
-    if (message.type === "PlayerUpdate") {
-      console.log("playerupdate");
-      // (async () => {
-      const user = message.data;
-      //let doc = new userSchema
-      let doc = {
-        // _id: mongoose.Types.ObjectId(),
-        participant: user,
-      };
-      //todo ---------------------- add dot env so mongo creds are hidden
-
-      UserModel.findOneAndUpdate({ "participant.userID": user.userID }, doc, {
-        upsert: true,
-      }).exec();
-    }
-
-    if (message.type === "EmailSubmit") {
-      console.log("email submittion");
-      const email = message.data;
-      let doc = {
-        email: email.Email,
-      };
-
-      EmailModel.create(doc);
-    }
   };
+
+  connectTo();
 });
 //keep anarray of clients
 //remove client from array when disconnected (loop to find client)
