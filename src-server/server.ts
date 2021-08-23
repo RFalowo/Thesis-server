@@ -60,7 +60,7 @@ wsServer.on("connection", (socket, request) => {
   console.log("someone connected");
 
   setTimeout(() => {
-    mongoose.connect(
+    mongoose.createConnection(
       "mongodb+srv://Remi:TJQvAr9SnEDGU2D@cluster0.43i0s.mongodb.net/Thesis?retryWrites=true&w=majority",
       {
         keepAlive: true,
