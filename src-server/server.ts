@@ -59,6 +59,18 @@ const clients: clients[] = [];
 wsServer.on("connection", (socket, request) => {
   console.log("someone connected");
 
+  setTimeout(() => {
+    mongoose.connect(
+      "mongodb+srv://Remi:TJQvAr9SnEDGU2D@cluster0.43i0s.mongodb.net/Thesis?retryWrites=true&w=majority",
+      {
+        keepAlive: true,
+        useNewUrlParser: true,
+        useUnifiedTopology: true,
+        useFindAndModify: false,
+      }
+    );
+  }, 5000);
+
   socket.onmessage = (messageEvent) => {
     const message = JSON.parse(messageEvent.data.toString()) as AppMessage;
     console.log(message);
