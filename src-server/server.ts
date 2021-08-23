@@ -24,9 +24,6 @@ mongoose
       useFindAndModify: false,
     }
   )
-  .catch((err) => {
-    console.log("connect error: ", err);
-  })
   .then(() => {
     console.log("connected to mongodb");
     const PORT: string | number = process.env.PORT || 5000;
@@ -100,6 +97,9 @@ mongoose
         }
       };
     });
+  })
+  .catch((err) => {
+    console.log("connect error: ", err);
   });
 
 // setTimeout(() => {
