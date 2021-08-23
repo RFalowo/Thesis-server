@@ -49,6 +49,7 @@ mongoose
         console.log(message);
         if (isGetOrder(message)) {
           console.log("message recieved from client");
+          console.log(UserModel);
           UserModel.estimatedDocumentCount().exec((err, count) => {
             const response: Order = {
               type: "Ord",
