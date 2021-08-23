@@ -7,69 +7,40 @@ import UserModel from "../src-shared/users.model.js";
 import EmailModel from "../src-shared/email.model.js";
 
 import dotenv from "dotenv";
-// console.log(dotenv);
-// dotenv.config();
+
 // console.log(dotenv.config);
 // dotenv.config({ path: "app/.env" });
 // const uri = process.env.MONGODBCRED;
 // console.log(uri);
-// mongoose.connect(
-//   "mongodb+srv://Remi:TJQvAr9SnEDGU2D@cluster0.43i0s.mongodb.net/Thesis?retryWrites=true&w=majority",
-//   {
-//     keepAlive: true,
-//     useNewUrlParser: true,
-//     useUnifiedTopology: true,
-//     useFindAndModify: false,
-//   }
-// );
+mongoose
+  .connect(
+    "mongodb+srv://Remi:TJQvAr9SnEDGU2D@cluster0.43i0s.mongodb.net/Thesis?retryWrites=true&w=majority",
+    {
+      keepAlive: true,
+      useNewUrlParser: true,
+      useUnifiedTopology: true,
+      useFindAndModify: false,
+    }
+  )
+  .then(() => {
+    const PORT: string | number = process.env.PORT || 5000;
+    const server = express()
+      .use((req, res) => {
+        res.sendFile("../src-server/server.html");
+      })
+      .listen(PORT);
 
-// setTimeout(() => {
-//   UserModel.estimatedDocumentCount().exec((err, count) => {
-//     var random = Math.floor(Math.random() * count);
-//     UserModel.findOne(
-//       { "participant.trials.designerType": "Sound" },
-//       (error, foundTrials) => {
-//         console.log(
-//           "found: ",
-//           foundTrials.participant.trials.filter((trial) => {
-//             return trial.designerType == "Sound";
-//           }),
-//           "error: ",
-//           error
-//         );
-//       }
-//     ).skip(random);
-//   });
-// }, 10000);
-const PORT: string | number = process.env.PORT || 5000;
-const server = express()
-  .use((req, res) => {
-    res.sendFile("../src-server/server.html");
-  })
-  .listen(PORT);
+    const wsServer = new ws.Server({ server });
 
-const wsServer = new ws.Server({ server });
+    interface clients {
+      socket: ws;
+      player: Player;
+    }
+    const clients: clients[] = [];
 
-interface clients {
-  socket: ws;
-  player: Player;
-}
-const clients: clients[] = [];
+    wsServer.on("connection", (socket, request) => {
+      console.log("someone connected");
 
-wsServer.on("connection", (socket, request) => {
-  console.log("someone connected");
-
-  mongoose
-    .connect(
-      "mongodb+srv://Remi:TJQvAr9SnEDGU2D@cluster0.43i0s.mongodb.net/Thesis?retryWrites=true&w=majority",
-      {
-        keepAlive: true,
-        useNewUrlParser: true,
-        useUnifiedTopology: true,
-        useFindAndModify: false,
-      }
-    )
-    .then(() => {
       socket.onmessage = (messageEvent) => {
         const message = JSON.parse(messageEvent.data.toString()) as AppMessage;
         console.log(message);
@@ -123,7 +94,27 @@ wsServer.on("connection", (socket, request) => {
         }
       };
     });
-});
+  });
+
+// setTimeout(() => {
+//   UserModel.estimatedDocumentCount().exec((err, count) => {
+//     var random = Math.floor(Math.random() * count);
+//     UserModel.findOne(
+//       { "participant.trials.designerType": "Sound" },
+//       (error, foundTrials) => {
+//         console.log(
+//           "found: ",
+//           foundTrials.participant.trials.filter((trial) => {
+//             return trial.designerType == "Sound";
+//           }),
+//           "error: ",
+//           error
+//         );
+//       }
+//     ).skip(random);
+//   });
+// }, 10000);
+
 //keep anarray of clients
 //remove client from array when disconnected (loop to find client)
 // message function to send to all clients from server
