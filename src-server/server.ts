@@ -5,7 +5,7 @@ import { Player } from "../src-shared/api";
 // import mongoose from "mongoose";
 import UserModel from "../src-shared/users.model.js";
 import EmailModel from "../src-shared/email.model.js";
-import { MongoClient } from "mongodb";
+import * as mongodb from "mongodb";
 
 import dotenv from "dotenv";
 
@@ -13,7 +13,7 @@ import dotenv from "dotenv";
 // dotenv.config({ path: "app/.env" });
 // const uri = process.env.MONGODBCRED;
 // console.log(uri);
-const mongoose = new MongoClient(
+const mongoose = new mongodb.MongoClient(
   "mongodb+srv://Remi:TJQvAr9SnEDGU2D@cluster0.43i0s.mongodb.net/Thesis?retryWrites=true&w=majority"
 );
 // mongoose.set("bufferCommands", false);
