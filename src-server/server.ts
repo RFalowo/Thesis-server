@@ -23,6 +23,9 @@ const flibby = async () => {
       useFindAndModify: false,
     }
   );
+  mongoose.connection.on("error", (err) => {
+    console.log(err);
+  });
   //  catch (e) {
   //   const result = e;
   //   console.log(result);
@@ -101,10 +104,6 @@ const flibby = async () => {
         EmailModel.create(doc);
       }
     };
-  });
-
-  mongoose.connection.on("error", (err) => {
-    console.log(err);
   });
 };
 
