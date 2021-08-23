@@ -5,7 +5,7 @@ import { Player } from "../src-shared/api";
 // import mongoose from "mongoose";
 import UserModel from "../src-shared/users.model.js";
 import EmailModel from "../src-shared/email.model.js";
-import * as mongodb from "mongodb";
+import mongodb from "mongodb";
 
 import dotenv from "dotenv";
 
