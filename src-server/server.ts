@@ -18,101 +18,102 @@ const mongoose = new mongodb.MongoClient(
   { useUnifiedTopology: true }
 );
 // mongoose.set("bufferCommands", false);
-const flibby = async () => {
-  // await mongoose.connect(
-  await mongoose.connect();
-  //   {
-  //     keepAlive: true,
-  //     useNewUrlParser: true,
-  //     useUnifiedTopology: true,
-  //     useFindAndModify: false,
-  //   }
-  // );
-  // mongoose.connection.on("error", (err) => {
-  //   console.log(err);
-  // });
-  //  catch (e) {
-  //   const result = e;
-  //   console.log(result);
-  // }
+// const flibby = async () => {
+// await mongoose.connect(
+// await
+mongoose.connect();
+//   {
+//     keepAlive: true,
+//     useNewUrlParser: true,
+//     useUnifiedTopology: true,
+//     useFindAndModify: false,
+//   }
+// );
+// mongoose.connection.on("error", (err) => {
+//   console.log(err);
+// });
+//  catch (e) {
+//   const result = e;
+//   console.log(result);
+// }
 
-  // catch ((error)=>  {
-  //     console.log("connect error: ", error);
-  // })
+// catch ((error)=>  {
+//     console.log("connect error: ", error);
+// })
 
-  // .then(() => {
-  console.log(UserModel);
-  const PORT: string | number = process.env.PORT;
-  const server = express()
-    .use((req, res) => {
-      res.sendFile("../src-server/server.html");
-    })
-    .listen(PORT);
+// .then(() => {
+console.log(UserModel);
+const PORT: string | number = process.env.PORT;
+const server = express()
+  .use((req, res) => {
+    res.sendFile("../src-server/server.html");
+  })
+  .listen(PORT);
 
-  const wsServer = new ws.Server({ server });
+const wsServer = new ws.Server({ server });
 
-  interface clients {
-    socket: ws;
-    player: Player;
-  }
-  const clients: clients[] = [];
+interface clients {
+  socket: ws;
+  player: Player;
+}
+const clients: clients[] = [];
 
-  wsServer.on("connection", (socket, request) => {
-    console.log("someone connected");
+wsServer.on("connection", (socket, request) => {
+  console.log("someone connected");
 
-    socket.onmessage = (messageEvent) => {
-      const message = JSON.parse(messageEvent.data.toString()) as AppMessage;
-      console.log(message);
-      if (isGetOrder(message)) {
-        console.log("message recieved from client");
+  socket.onmessage = (messageEvent) => {
+    const message = JSON.parse(messageEvent.data.toString()) as AppMessage;
+    console.log(message);
+    if (isGetOrder(message)) {
+      console.log("message recieved from client");
 
-        UserModel.estimatedDocumentCount().exec((err, count) => {
-          const response: Order = {
-            type: "Ord",
-            data: count % 2 === 0 ? "Sound" : "3D",
-          };
-          socket.send(JSON.stringify(response));
-          console.log("count error: ", err);
-        });
-      }
-      if (message.type === "PlayerConnected") {
-        console.log(message.data.userID);
-        clients.push({
-          socket,
-          player: message.data,
-        });
-      }
-
-      if (message.type === "PlayerUpdate") {
-        console.log("playerupdate");
-        // (async () => {
-        const user = message.data;
-        //let doc = new userSchema
-        let doc = {
-          // _id: mongoose.Types.ObjectId(),
-          participant: user,
+      UserModel.estimatedDocumentCount().exec((err, count) => {
+        const response: Order = {
+          type: "Ord",
+          data: count % 2 === 0 ? "Sound" : "3D",
         };
-        //todo ---------------------- add dot env so mongo creds are hidden
+        socket.send(JSON.stringify(response));
+        console.log("count error: ", err);
+      });
+    }
+    if (message.type === "PlayerConnected") {
+      console.log(message.data.userID);
+      clients.push({
+        socket,
+        player: message.data,
+      });
+    }
 
-        UserModel.findOneAndUpdate({ "participant.userID": user.userID }, doc, {
-          upsert: true,
-        }).exec();
-      }
+    if (message.type === "PlayerUpdate") {
+      console.log("playerupdate");
+      // (async () => {
+      const user = message.data;
+      //let doc = new userSchema
+      let doc = {
+        // _id: mongoose.Types.ObjectId(),
+        participant: user,
+      };
+      //todo ---------------------- add dot env so mongo creds are hidden
 
-      if (message.type === "EmailSubmit") {
-        console.log("email submittion");
-        const email = message.data;
-        let doc = {
-          email: email.Email,
-        };
+      UserModel.findOneAndUpdate({ "participant.userID": user.userID }, doc, {
+        upsert: true,
+      }).exec();
+    }
 
-        EmailModel.create(doc);
-      }
-    };
-  });
-};
+    if (message.type === "EmailSubmit") {
+      console.log("email submittion");
+      const email = message.data;
+      let doc = {
+        email: email.Email,
+      };
 
-flibby();
+      EmailModel.create(doc);
+    }
+  };
+});
+// };
+
+// flibby();
 // })
 
 // setTimeout(() => {
