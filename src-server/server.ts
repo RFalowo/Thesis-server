@@ -28,6 +28,7 @@ mongoose
     console.log("connect error: ", err);
   })
   .then(() => {
+    console.log("connected to mongodb");
     const PORT: string | number = process.env.PORT || 5000;
     const server = express()
       .use((req, res) => {
