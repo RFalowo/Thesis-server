@@ -13,28 +13,27 @@ import dotenv from "dotenv";
 // const uri = process.env.MONGODBCRED;
 // console.log(uri);
 mongoose.set("bufferCommands", false);
-async () => {
-  try {
-    await mongoose.connect(
-      "mongodb+srv://Remi:TJQvAr9SnEDGU2D@cluster0.43i0s.mongodb.net/Thesis?retryWrites=true&w=majority",
-      {
-        keepAlive: true,
-        useNewUrlParser: true,
-        useUnifiedTopology: true,
-        useFindAndModify: false,
-      }
-    );
-  } catch (e) {
-    const result = e.MessageUps;
-    console.log(result);
-  }
+const flibby = async () => {
+  await mongoose.connect(
+    "mongodb+srv://Remi:TJQvAr9SnEDGU2D@cluster0.43i0s.mongodb.net/Thesis?retryWrites=true&w=majority",
+    {
+      keepAlive: true,
+      useNewUrlParser: true,
+      useUnifiedTopology: true,
+      useFindAndModify: false,
+    }
+  );
+  //  catch (e) {
+  //   const result = e;
+  //   console.log(result);
+  // }
 
   // catch ((error)=>  {
   //     console.log("connect error: ", error);
   // })
 
   // .then(() => {
-  console.log("connected to mongodb");
+  console.log(UserModel);
   const PORT: string | number = process.env.PORT || 5000;
   const server = express()
     .use((req, res) => {
@@ -58,7 +57,7 @@ async () => {
       console.log(message);
       if (isGetOrder(message)) {
         console.log("message recieved from client");
-        console.log(UserModel);
+
         UserModel.estimatedDocumentCount().exec((err, count) => {
           const response: Order = {
             type: "Ord",
@@ -104,6 +103,8 @@ async () => {
     };
   });
 };
+
+flibby();
 // })
 
 // setTimeout(() => {
