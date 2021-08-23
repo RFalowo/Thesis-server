@@ -102,6 +102,10 @@ const flibby = async () => {
       }
     };
   });
+
+  mongoose.connection.on("error", (err) => {
+    console.log(err);
+  });
 };
 
 flibby();
