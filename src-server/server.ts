@@ -24,8 +24,8 @@ mongoose
       useFindAndModify: false,
     }
   )
-  .catch((error) => {
-    console.log("connect error: ", error);
+  .catch((err) => {
+    console.log("connect error: ", err);
   })
   .then(() => {
     const PORT: string | number = process.env.PORT || 5000;
