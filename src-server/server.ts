@@ -13,100 +13,98 @@ import dotenv from "dotenv";
 // const uri = process.env.MONGODBCRED;
 // console.log(uri);
 mongoose.set("bufferCommands", false);
+async () => {
+  try {
+    await mongoose.connect(
+      "mongodb+srv://Remi:TJQvAr9SnEDGU2D@cluster0.43i0s.mongodb.net/Thesis?retryWrites=true&w=majority",
+      {
+        keepAlive: true,
+        useNewUrlParser: true,
+        useUnifiedTopology: true,
+        useFindAndModify: false,
+      }
+    );
+  } catch (e) {
+    const result = e.MessageUps;
+    console.log(result);
+  }
+};
 
-try {
-await mongoose
-  .connect(
-    "mongodb+srv://Remi:TJQvAr9SnEDGU2D@cluster0.43i0s.mongodb.net/Thesis?retryWrites=true&w=majority",
-    {
-      keepAlive: true,
-      useNewUrlParser: true,
-      useUnifiedTopology: true,
-      useFindAndModify: false,
+// catch ((error)=>  {
+//     console.log("connect error: ", error);
+// })
+
+// .then(() => {
+console.log("connected to mongodb");
+const PORT: string | number = process.env.PORT || 5000;
+const server = express()
+  .use((req, res) => {
+    res.sendFile("../src-server/server.html");
+  })
+  .listen(PORT);
+
+const wsServer = new ws.Server({ server });
+
+interface clients {
+  socket: ws;
+  player: Player;
+}
+const clients: clients[] = [];
+
+wsServer.on("connection", (socket, request) => {
+  console.log("someone connected");
+
+  socket.onmessage = (messageEvent) => {
+    const message = JSON.parse(messageEvent.data.toString()) as AppMessage;
+    console.log(message);
+    if (isGetOrder(message)) {
+      console.log("message recieved from client");
+      console.log(UserModel);
+      UserModel.estimatedDocumentCount().exec((err, count) => {
+        const response: Order = {
+          type: "Ord",
+          data: count % 2 === 0 ? "Sound" : "3D",
+        };
+        socket.send(JSON.stringify(response));
+        console.log("count error: ", err);
+      });
     }
-  )
-  
-}catch((error)=>  {
-    console.log("connect error: ", error);
-});
-
-
-  // .then(() => {
-    console.log("connected to mongodb");
-    const PORT: string | number = process.env.PORT || 5000;
-    const server = express()
-      .use((req, res) => {
-        res.sendFile("../src-server/server.html");
-      })
-      .listen(PORT);
-
-    const wsServer = new ws.Server({ server });
-
-    interface clients {
-      socket: ws;
-      player: Player;
+    if (message.type === "PlayerConnected") {
+      console.log(message.data.userID);
+      clients.push({
+        socket,
+        player: message.data,
+      });
     }
-    const clients: clients[] = [];
 
-    wsServer.on("connection", (socket, request) => {
-      console.log("someone connected");
-
-      socket.onmessage = (messageEvent) => {
-        const message = JSON.parse(messageEvent.data.toString()) as AppMessage;
-        console.log(message);
-        if (isGetOrder(message)) {
-          console.log("message recieved from client");
-          console.log(UserModel);
-          UserModel.estimatedDocumentCount().exec((err, count) => {
-            const response: Order = {
-              type: "Ord",
-              data: count % 2 === 0 ? "Sound" : "3D",
-            };
-            socket.send(JSON.stringify(response));
-            console.log("count error: ", err);
-          });
-        }
-        if (message.type === "PlayerConnected") {
-          console.log(message.data.userID);
-          clients.push({
-            socket,
-            player: message.data,
-          });
-        }
-
-        if (message.type === "PlayerUpdate") {
-          console.log("playerupdate");
-          // (async () => {
-          const user = message.data;
-          //let doc = new userSchema
-          let doc = {
-            // _id: mongoose.Types.ObjectId(),
-            participant: user,
-          };
-          //todo ---------------------- add dot env so mongo creds are hidden
-
-          UserModel.findOneAndUpdate(
-            { "participant.userID": user.userID },
-            doc,
-            {
-              upsert: true,
-            }
-          ).exec();
-        }
-
-        if (message.type === "EmailSubmit") {
-          console.log("email submittion");
-          const email = message.data;
-          let doc = {
-            email: email.Email,
-          };
-
-          EmailModel.create(doc);
-        }
+    if (message.type === "PlayerUpdate") {
+      console.log("playerupdate");
+      // (async () => {
+      const user = message.data;
+      //let doc = new userSchema
+      let doc = {
+        // _id: mongoose.Types.ObjectId(),
+        participant: user,
       };
-    });
-  // })
-  
+      //todo ---------------------- add dot env so mongo creds are hidden
+
+      UserModel.findOneAndUpdate({ "participant.userID": user.userID }, doc, {
+        upsert: true,
+      }).exec();
+    }
+
+    if (message.type === "EmailSubmit") {
+      console.log("email submittion");
+      const email = message.data;
+      let doc = {
+        email: email.Email,
+      };
+
+      EmailModel.create(doc);
+    }
+  };
+});
+// })
 
 // setTimeout(() => {
 //   UserModel.estimatedDocumentCount().exec((err, count) => {

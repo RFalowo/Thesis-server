@@ -2,10 +2,14 @@
   "types": ["node"],
 
   "extends": "../tsconfig.json",
-  "include": [".","../src-shared"],                             /* Specify the root directory of input files. Use to control the output directory structure with --outDir. */
+  "include": [
+    ".",
+    "../src-shared"
+  ] /* Specify the root directory of input files. Use to control the output directory structure with --outDir. */,
   "compilerOptions": {
+    "module": "esnext",
     /* Visit https://aka.ms/tsconfig.json to read more about this file */
 
-    "outDir": "../dst-server",                              /* Redirect output structure to the directory. */
+    "outDir": "../dst-server" /* Redirect output structure to the directory. */
   }
 }
