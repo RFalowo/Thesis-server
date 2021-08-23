@@ -42,7 +42,7 @@ const flibby = async () => {
 
   // .then(() => {
   console.log(UserModel);
-  const PORT: string | number = process.env.PORT || 5000;
+  const PORT: string | number = process.env.PORT;
   const server = express()
     .use((req, res) => {
       res.sendFile("../src-server/server.html");
