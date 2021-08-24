@@ -7,12 +7,12 @@ import UserModel from "../src-shared/users.model.js";
 import EmailModel from "../src-shared/email.model.js";
 
 import dotenv from "dotenv";
-console.log(dotenv);
+// console.log(dotenv);
 dotenv.config();
-console.log(dotenv.config);
+// console.log(dotenv.config);
 dotenv.config({ path: "app/.env" });
 const uri = process.env.MONGODBCRED;
-console.log(uri);
+// console.log(uri);
 mongoose.connect(
   "mongodb+srv://Remi:TJQvAr9SnEDGU2D@cluster0.43i0s.mongodb.net/Thesis?retryWrites=true&w=majority",
   {
