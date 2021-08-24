@@ -2,48 +2,46 @@ import express from "express";
 import ws from "ws";
 import { AppMessage, isGetOrder, Order } from "../src-shared/messages.js";
 import { Player } from "../src-shared/api";
-// import mongoose from "mongoose";
+import mongoose from "mongoose";
 import UserModel from "../src-shared/users.model.js";
 import EmailModel from "../src-shared/email.model.js";
-import mongodb from "mongodb";
 
 import dotenv from "dotenv";
-
+console.log(dotenv);
+dotenv.config();
 // console.log(dotenv.config);
-// dotenv.config({ path: "app/.env" });
-// const uri = process.env.MONGODBCRED;
-// console.log(uri);
-const mongoose = new mongodb.MongoClient(
+//dotenv.config({ path: "../../client-server/.env" });
+//const uri = process.env.MONGODBCRED;
+//console.log(uri);
+mongoose.connect(
   "mongodb+srv://Remi:TJQvAr9SnEDGU2D@cluster0.43i0s.mongodb.net/Thesis?retryWrites=true&w=majority",
-  { useUnifiedTopology: true }
+  {
+    keepAlive: true,
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+    useFindAndModify: false,
+  }
 );
-// mongoose.set("bufferCommands", false);
-// const flibby = async () => {
-// await mongoose.connect(
-// await
-mongoose.connect();
-//   {
-//     keepAlive: true,
-//     useNewUrlParser: true,
-//     useUnifiedTopology: true,
-//     useFindAndModify: false,
-//   }
-// );
-// mongoose.connection.on("error", (err) => {
-//   console.log(err);
-// });
-//  catch (e) {
-//   const result = e;
-//   console.log(result);
-// }
 
-// catch ((error)=>  {
-//     console.log("connect error: ", error);
-// })
-
-// .then(() => {
-console.log(UserModel);
-const PORT: string | number = process.env.PORT;
+// setTimeout(() => {
+//   UserModel.estimatedDocumentCount().exec((err, count) => {
+//     var random = Math.floor(Math.random() * count);
+//     UserModel.findOne(
+//       { "participant.trials.designerType": "Sound" },
+//       (error, foundTrials) => {
+//         console.log(
+//           "found: ",
+//           foundTrials.participant.trials.filter((trial) => {
+//             return trial.designerType == "Sound";
+//           }),
+//           "error: ",
+//           error
+//         );
+//       }
+//     ).skip(random);
+//   });
+// }, 10000);
+const PORT: string | number = process.env.PORT || 5000;
 const server = express()
   .use((req, res) => {
     res.sendFile("../src-server/server.html");
@@ -66,7 +64,6 @@ wsServer.on("connection", (socket, request) => {
     console.log(message);
     if (isGetOrder(message)) {
       console.log("message recieved from client");
-
       UserModel.estimatedDocumentCount().exec((err, count) => {
         const response: Order = {
           type: "Ord",
@@ -111,30 +108,6 @@ wsServer.on("connection", (socket, request) => {
     }
   };
 });
-// };
-
-// flibby();
-// })
-
-// setTimeout(() => {
-//   UserModel.estimatedDocumentCount().exec((err, count) => {
-//     var random = Math.floor(Math.random() * count);
-//     UserModel.findOne(
-//       { "participant.trials.designerType": "Sound" },
-//       (error, foundTrials) => {
-//         console.log(
-//           "found: ",
-//           foundTrials.participant.trials.filter((trial) => {
-//             return trial.designerType == "Sound";
-//           }),
-//           "error: ",
-//           error
-//         );
-//       }
-//     ).skip(random);
-//   });
-// }, 10000);
-
 //keep anarray of clients
 //remove client from array when disconnected (loop to find client)
 // message function to send to all clients from server
