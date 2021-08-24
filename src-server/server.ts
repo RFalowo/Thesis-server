@@ -45,6 +45,7 @@ const PORT: string | number = process.env.PORT || 5000;
 const server = express()
   .use((req, res) => {
     res.sendFile("../src-server/server.html");
+    console.log("listening");
   })
   .listen(PORT);
 
